@@ -19,7 +19,7 @@ class CreateItemsTable extends Migration
             $table->string('description');
             $table->integer('price');
             $table->dateTime('auctionDeadline');
-            $table->double('highestBid');
+            $table->string('highestBid');
             $table->longText('biddingHistory');
             $table->timestamps();
         });

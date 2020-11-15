@@ -2,10 +2,10 @@
 	<div class="pos-rel">
 		<div class="container">
 			<header-component></header-component>
-			<div class="table-wrapper">
+			<div class="table-wrapper mt-4">
 				<h4 class="text-left heading-text mb-4">Browse through our antique items... </h4>
-				<div class="tools-wrapper mb-4 text-left d-flex justify-content-between" style="height:35px">
 				<template v-if="isAdmin">
+				<div class="tools-wrapper mb-4 text-left d-flex justify-content-between" style="height:35px">
 					<div class="search-box d-flex w-100">
 						<input type="text" class="input-custom mr-3 h-100 w-80" v-model="searchTerm" placeholder="Search...">
 						<a href="javascript:void(0)" class="btn-custom search h-100 w-20" @click="searchByTerm">Search</a>
@@ -14,8 +14,8 @@
 						<a href="javascript:void(0)" class="btn-custom search h-100" @click="openAddDialog">Add New
 							Item</a>
 					</div>
-				</template>
 				</div>
+				</template>
                 <b-spinner v-if="!loadingDone" label="Loading..."></b-spinner>
 				<div class="table" v-else>
 					<div class="row header">
@@ -377,57 +377,6 @@
 	}
 </script>
 <style lang="scss">
-	.table-wrapper {
-		margin-top: 100px;
-
-		.table {
-			width: 100%;
-			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-			display: table;
-			border-radius: 5px;
-		}
-
-		.row {
-			display: table-row;
-			background: #f6f6f6;
-			transition: all 0.3s ease;
-
-			&.header {
-				background: #4caf50 !important;
-				font-weight: bold;
-				color: white;
-
-				.cell {
-					&:first-child {
-						border-radius: 5px 0px 0px 0px;
-					}
-
-					&:last-child {
-						border-radius: 0px 5px 0px 0px;
-					}
-				}
-			}
-
-			&:nth-of-type(odd) {
-				background: white;
-			}
-
-			&:last-child {
-				border-radius: 0px 0px 5px 5px;
-			}
-		}
-
-		.cell {
-			padding: 6px 12px;
-			display: table-cell;
-			vertical-align: middle;
-
-			&[data-title="Description"] {
-				width: 55%;
-				text-align: left;
-			}
-		}
-	}
 
 	.pagination {
 		ul {
@@ -467,58 +416,6 @@
 		}
 	}
 
-	@media screen and (max-width: 580px) {
-		.overlay{
-			.form-box{
-				margin: 10px;
-				height: unset !important;
-			}
-		}
-		.heading-text {
-			font-size: 22px;
-		}
-
-		.cell {
-			padding: 2px 16px;
-			display: block;
-		}
-
-		.row {
-
-			padding: 14px 0 7px;
-			display: block;
-
-			&.header {
-				padding: 0;
-				height: 6px;
-
-				.cell {
-					display: none;
-				}
-			}
-
-			.cell {
-				margin-bottom: 10px;
-
-				&:before {
-					margin-bottom: 3px;
-					content: attr(data-title);
-					min-width: 98px;
-					font-size: 10px;
-					line-height: 10px;
-					font-weight: bold;
-					text-transform: uppercase;
-					color: #969696;
-					display: block;
-				}
-			}
-		}
-
-		.table {
-			display: block;
-		}
-	}
-
 	.search-box{
 
 	}
@@ -527,31 +424,5 @@
 		display: block;
     	min-width: 150px;
 		}
-	}
-
-	@media screen and (max-width: 500px) {
-		.table-wrapper{
-			.row{
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-			}
-			.cell[data-title=Description]{
-				text-align: center;
-			} 
-			.table{
-				margin-top: 100px;
-			}
-		}
-		.search-box{
-			margin-bottom: 20px;
-			input{
-				width: 80%;
-			}
-		}
-		.tools-wrapper{
-			flex-direction: column;
-		}
-
 	}
 </style>

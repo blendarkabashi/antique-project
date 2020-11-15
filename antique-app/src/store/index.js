@@ -21,7 +21,7 @@ export default new Vuex.Store({
       console.log(payload)
       localStorage.setItem('user', JSON.stringify(payload));
     },
-    logout(context){
+    logout(state,context){
       state.isAuthenticated = false;
     },
   },

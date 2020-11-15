@@ -158,3 +158,132 @@ html,body{
     margin: 0;
     padding: 0;
 }
+
+.table-wrapper {
+
+    .table {
+        width: 100%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: table;
+        border-radius: 5px;
+    }
+
+    .row {
+        display: table-row;
+        background: #f6f6f6;
+        transition: all 0.3s ease;
+
+        &.header {
+            background: #4caf50 !important;
+            font-weight: bold;
+            color: white;
+
+            .cell {
+                &:first-child {
+                    border-radius: 5px 0px 0px 0px;
+                }
+
+                &:last-child {
+                    border-radius: 0px 5px 0px 0px;
+                }
+            }
+        }
+
+        &:nth-of-type(odd) {
+            background: white;
+        }
+
+        &:last-child {
+            border-radius: 0px 0px 5px 5px;
+        }
+    }
+
+    .cell {
+        padding: 6px 12px;
+        display: table-cell;
+        vertical-align: middle;
+
+        &[data-title="Description"] {
+            width: 55%;
+            text-align: left;
+        }
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .overlay{
+        .form-box{
+            margin: 10px;
+            height: unset !important;
+        }
+    }
+    .heading-text {
+        font-size: 22px;
+    }
+
+    .cell {
+        padding: 2px 16px;
+        display: block;
+    }
+
+    .row {
+
+        padding: 14px 0 7px;
+        display: block;
+
+        &.header {
+            padding: 0;
+            height: 6px;
+
+            .cell {
+                display: none;
+            }
+        }
+
+        .cell {
+            margin-bottom: 10px;
+
+            &:before {
+                margin-bottom: 3px;
+                content: attr(data-title);
+                min-width: 98px;
+                font-size: 10px;
+                line-height: 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #969696;
+                display: block;
+            }
+        }
+    }
+
+    .table {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .table-wrapper{
+        .row{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cell[data-title=Description]{
+            text-align: center;
+        } 
+        .table{
+            margin-top: 100px;
+        }
+    }
+    .search-box{
+        margin-bottom: 20px;
+        input{
+            width: 80%;
+        }
+    }
+    .tools-wrapper{
+        flex-direction: column;
+    }
+
+}

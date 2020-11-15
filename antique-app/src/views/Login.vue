@@ -2,34 +2,90 @@
     <div class="login-background">
         <div class="form-box-holder">
             <h2 class="mb-3">Antique</h2>
-            <transition name="slide-from-up">
-                <div class="error-banner mb-3" v-if="loginFailed">
-                    <b-icon icon="exclamation-triangle-fill" scale="2" variant="danger" class="mr-3"></b-icon>
-                    Username or Password incorrect!
-                </div>
-            </transition>
-            <form action="" class="form-holder" @keyup.enter="login">
-                <div class="username mb-3">
-                    <label>Username:</label>
-                    <input @input="validateUsername()" class="input-custom" type="text" v-model="user.username"
-                        name="user">
-                    <transition name="slide-from-up">
-                        <p class="error-message" v-if="!usernameValid && usernameValidationStarted">The username is
-                            required</p>
-                    </transition>
-                </div>
-                <div class="password">
-                    <label>Password:</label>
-                    <input @input="validatePassword()" class="input-custom" v-model="user.password" type="password"
-                        name="password">
-                    <transition name="slide-from-up">
-                        <p class="error-message" v-if="!passwordValid && passwordValidationStarted">The password is
-                            required</p>
-                    </transition>
-                </div>
-                <a @click="login" href="javascript:void(0)" :class="{ 'removeDisabled': isValidated }"
-                    class="btn-custom mt-5">LOGIN</a>
-            </form>
+            <template v-if="loginPage">
+                <transition name="slide-from-up">
+                    <div class="error-banner mb-3" v-if="loginFailed">
+                        <b-icon icon="exclamation-triangle-fill" scale="2" variant="danger" class="mr-3"></b-icon>
+                        {{loginFailedMessage}}
+                    </div>
+                </transition>
+                <form action="" class="form-holder" @keyup.enter="login">
+                    <div class="username mb-3">
+                        <label>Username:</label>
+                        <input class="input-custom" type="text" v-model="loginUser.username" name="user">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!loginUsername">The username is
+                                required</p>
+                        </transition>
+                    </div>
+                    <div class="password">
+                        <label>Password:</label>
+                        <input class="input-custom" v-model="loginUser.password" type="password" name="password">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!loginPassword">The password is
+                                required</p>
+                        </transition>
+                    </div>
+                    <a @click="login" href="javascript:void(0)" :class="{ 'removeDisabled': isLoginValidated }"
+                        class="btn-custom mt-5">LOGIN</a>
+
+                    <p class="auth-switcher text-center mt-3">Not a user? <a href="javascript:void(0)"
+                            @click="loginPage=false">Click here</a> to register</p>
+
+                </form>
+            </template>
+            <template v-else>
+                <transition name="slide-from-up">
+                    <div class="error-banner mb-3" v-if="registrationFailed">
+                        <b-icon icon="exclamation-triangle-fill" scale="2" variant="danger" class="mr-3"></b-icon>
+                        Registration Failed!
+                    </div>
+                </transition>
+                <form action="" class="form-holder" @keyup.enter="register">
+                    <div class="username mb-3">
+                        <label>Username:</label>
+                        <input class="input-custom" type="text" v-model="registerUser.username" name="user">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!registerUsername">The username is
+                                required</p>
+                        </transition>
+                    </div>
+                    <div class="email mb-3">
+                        <label>Email:</label>
+                        <input class="input-custom" type="text" v-model="registerUser.email" name="user">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!registerEmail">The username is
+                                required</p>
+                        </transition>
+                    </div>
+                    <div class="password mb-3">
+                        <label>Password:</label>
+                        <input class="input-custom" v-model="registerUser.password" type="password" name="password">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!registerPassword">The password is
+                                required</p>
+                        </transition>
+                    </div>
+                    <div class="confirm-password mb-3">
+                        <label>Confirm Password:</label>
+                        <input class="input-custom" v-model="registerUser.confirmPassword" type="password"
+                            name="password">
+                        <transition name="slide-from-up">
+                            <p class="error-message" v-if="!registerPasswordMatch">Passwords should match</p>
+                        </transition>
+                    </div>
+                    <div class="checkbox">
+                        <b-form-checkbox id="checkbox-1" v-model="registerUser.isAdmin" name="checkbox-1">
+                            Check this if this user is an admin
+                        </b-form-checkbox>
+                    </div>
+                    <a @click="register" href="javascript:void(0)" :class="{ 'removeDisabled': isRegisterValidated }"
+                        class="btn-custom mt-5">REGISTER</a>
+
+                    <p class="auth-switcher text-center mt-3">Already registered? <a href="javascript:void(0)"
+                            @click="loginPage=true">Sign in</a> instead</p>
+                </form>
+            </template>
         </div>
     </div>
 </template>
@@ -38,61 +94,117 @@
     export default {
         data() {
             return {
+                registrationFailed: false,
+                loginFailedMessage:'',
+                loginPage: true,
                 loginFailed: false,
-                usernameValidationStarted: false,
-                passwordValidationStarted: false,
-                usernameValid: false,
-                passwordValid: false,
-                user: {
+                registrationFailed: false,
+                loginUser: {
                     username: '',
                     password: '',
+                },
+                registerUser: {
+                    username: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                    isAdmin: false
                 }
+
             }
         },
         methods: {
-            validateUsername() {
-                this.usernameValidationStarted = true
-                if (this.user.username.length < 1) {
-                    this.usernameValid = false
-                } else {
-                    this.usernameValid = true
-                }
-            },
-            validatePassword() {
-                this.passwordValidationStarted = true
-                if (this.user.password.length < 1) {
-                    this.passwordValid = false
-                } else {
-                    this.passwordValid = true
-                }
-            },
             login() {
-                if (this.user.username == 'user' && this.user.password == 'user') {
-                    var user = {
-                        username: this.user.username,
-                        password: this.user.password,
-                        userType: 2
-                    }
-                    this.loginFailed = false
-                    this.$store.dispatch('storeUser', user)
-                    this.$router.push({name: 'Home'})
-                } else if (this.user.username == 'admin' && this.user.password == 'admin') {
-                    var user = {
-                        username: this.user.username,
-                        password: this.user.password,
-                        userType: 1
-                    }
-                    this.loginFailed = false
-                    this.$store.dispatch('storeUser', user)
-                    this.$router.push({name: 'Home'})
-                } else {
-                    this.loginFailed = true
+                const data = {
+                    username: this.loginUser.username,
+                    password: this.loginUser.password,
                 }
+                this.axios.post('/login', data).then(response => {
+                    this.loginFailed = false
+                    this.$store.dispatch('storeUser', response.data)
+                    this.$router.push({
+                        name: 'Home'
+                    })
+                }).catch(error => {
+                    this.loginFailedMessage = error.response.data.error
+                    this.loginFailed = true
+                })
+            },
+            register() {
+                const data = {
+                    username: this.registerUser.username,
+                    password: this.registerUser.password,
+                    email: this.registerUser.email,
+                    userType: this.registerUser.isAdmin == true ? 1 : 2,
+                }
+
+                this.axios.post('/register', data).then(response => {
+                    this.loginFailed = false
+                    this.$store.dispatch('storeUser', response.data)
+                    this.$router.push({
+                        name: 'Home'
+                    })
+                }).catch(error => {
+                    this.loginFailed = true
+                })
             }
         },
         computed: {
-            isValidated: function () {
-                if (this.usernameValid && this.passwordValid) {
+            isLoginValidated: function () {
+                if (this.loginUsername && this.loginPassword) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            isRegisterValidated: function () {
+                if (this.registerUsername && this.registerPassword && this.registerEmail && this
+                    .registerPasswordMatch) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            loginUsername: function () {
+                if (this.loginUser.username) {
+                    this.loginUser.showUsernameValidation = false
+                    return true
+                } else {
+                    this.loginUser.showUsernameValidation = true
+                    return false
+                }
+            },
+            loginPassword: function () {
+                if (this.loginUser.password) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            registerUsername: function () {
+                if (this.registerUser.username) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            registerEmail: function () {
+                if (this.registerUser.email) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            registerPassword: function () {
+                if (this.registerUser.password) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            registerPasswordMatch: function () {
+                if (this.registerUser.password == this.registerUser.confirmPassword && this.registerUser
+                    .confirmPassword) {
                     return true
                 } else {
                     return false
@@ -112,7 +224,7 @@
     .login-background {
         position: relative;
         background: #4caf50;
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -129,7 +241,9 @@
 
             .form-holder,
             .username,
-            .password {
+            .password,
+            .confirm-password,
+            .email {
                 display: grid;
                 text-align: left;
 
